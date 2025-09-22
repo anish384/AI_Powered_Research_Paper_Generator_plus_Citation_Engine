@@ -1,0 +1,214 @@
+<!-- templates/generate.html -->
+{% extends "base.html" %}
+
+{% block title %}Generate Research Paper{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+        <div class="step active" id="step1">
+            <i class="fas fa-pencil-alt"></i>
+        </div>
+        <div class="step" id="step2">
+            <i class="fas fa-cog"></i>
+        </div>
+        <div class="step" id="step3">
+            <i class="fas fa-magic"></i>
+        </div>
+        <div class="step" id="step4">
+            <i class="fas fa-download"></i>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card animate__animated animate__fadeInUp">
+                <div class="card-header bg-gradient text-white text-center">
+                    <h2 class="card-title mb-0">
+                        <i class="fas fa-brain me-2"></i>
+                        Generate Research Paper
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    <form id="generateForm">
+                        <!-- Topic Input -->
+                        <div class="mb-4">
+                            <label for="topic" class="form-label">
+                                <i class="fas fa-lightbulb text-warning me-2"></i>
+                                Research Topic
+                            </label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="topic" 
+                                   name="topic" 
+                                   placeholder="Enter your research topic (e.g., 'Artificial Intelligence in Healthcare')"
+                                   required>
+                            <div class="form-text">Be specific for better results</div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Paper Type -->
+                            <div class="col-md-6 mb-4">
+                                <label for="paperType" class="form-label">
+                                    <i class="fas fa-file-alt text-info me-2"></i>
+                                    Paper Type
+                                </label>
+                                <select class="form-select" id="paperType" name="paper_type">
+                                    <option value="research">Research Paper</option>
+                                    <option value="review">Literature Review</option>
+                                    <option value="essay">Academic Essay</option>
+                                    <option value="thesis">Thesis Chapter</option>
+                                    <option value="report">Technical Report</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Length -->
+                            <div class="col-md-6 mb-4">
+                                <label for="length" class="form-label">
+                                    <i class="fas fa-ruler text-success me-2"></i>
+                                    Paper Length
+                                </label>
+                                <select class="form-select" id="length" name="length">
+                                    <option value="short">Short (800-1200 words)</option>
+                                    <option value="medium" selected>Medium (1500-2500 words)</option>
+                                    <option value="long">Long (3000-5000 words)</option>
+                                    <option value="extended">Extended (5000+ words)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Citation Style -->
+                            <div class="col-md-6 mb-4">
+                                <label for="citationStyle" class="form-label">
+                                    <i class="fas fa-quote-right text-primary me-2"></i>
+                                    Citation Style
+                                </label>
+                                <select class="form-select" id="citationStyle" name="citation_style">
+                                    <option value="apa" selected>APA 7th Edition</option>
+                                    <option value="mla">MLA 8th Edition</option>
+                                    <option value="chicago">Chicago Style</option>
+                                    <option value="ieee">IEEE Style</option>
+                                    <option value="harvard">Harvard Style</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Include References -->
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">
+                                    <i class="fas fa-book text-secondary me-2"></i>
+                                    Options
+                                </label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="includeReferences" name="include_references" checked>
+                                    <label class="form-check-label" for="includeReferences">
+                                        Include References
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="generateOutline" name="generate_outline" checked>
+                                    <label class="form-check-label" for="generateOutline">
+                                        Generate Outline First
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Generate Button -->
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="fas fa-magic me-2"></i>
+                                Generate Paper
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Progress Section -->
+            <div id="progressSection" class="card mt-4" style="display: none;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-hourglass-half me-2"></i>
+                        Generation Progress
+                    </h5>
+                    <div class="progress mb-3">
+                        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <div id="progressStatus" class="text-muted">Initializing...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('generateForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Convert checkbox values
+        data.include_references = document.getElementById('includeReferences').checked;
+        data.generate_outline = document.getElementById('generateOutline').checked;
+        
+        try {
+            showProgress();
+            updateProgress(10, 'Validating inputs...');
+            
+            // Simulate progress updates
+            setTimeout(() => updateProgress(30, 'Generating outline...'), 1000);
+            setTimeout(() => updateProgress(50, 'Creating content...'), 3000);
+            setTimeout(() => updateProgress(70, 'Searching citations...'), 5000);
+            setTimeout(() => updateProgress(90, 'Finalizing paper...'), 7000);
+            
+            const result = await apiCall('/api/generate-paper', data, 'POST');
+            
+            updateProgress(100, 'Complete!');
+            
+            // Store result and redirect
+            sessionStorage.setItem('paperResult', JSON.stringify(result));
+            setTimeout(() => {
+                window.location.href = '/result';
+            }, 1000);
+            
+        } catch (error) {
+            hideProgress();
+            showAlert(`Error generating paper: ${error.message}`, 'danger');
+        }
+    });
+    
+    function showProgress() {
+        document.getElementById('progressSection').style.display = 'block';
+        document.getElementById('progressSection').scrollIntoView({ behavior: 'smooth' });
+        updateStep(2);
+    }
+    
+    function hideProgress() {
+        document.getElementById('progressSection').style.display = 'none';
+    }
+    
+    function updateProgress(percent, status) {
+        document.getElementById('progressBar').style.width = percent + '%';
+        document.getElementById('progressStatus').textContent = status;
+        
+        if (percent >= 30) updateStep(3);
+        if (percent >= 100) updateStep(4);
+    }
+    
+    function updateStep(stepNumber) {
+        document.querySelectorAll('.step').forEach((step, index) => {
+            step.classList.remove('active', 'completed');
+            if (index + 1 < stepNumber) {
+                step.classList.add('completed');
+            } else if (index + 1 === stepNumber) {
+                step.classList.add('active');
+            }
+        });
+    }
+</script>
+{% endblock %}

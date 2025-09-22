@@ -1,0 +1,490 @@
+<!-- templates/result.html -->
+{% extends "base.html" %}
+
+{% block title %}Research Paper Generated{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <div class="card animate__animated animate__fadeInUp">
+                <div class="card-header bg-gradient text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Paper Generated Successfully!
+                        </h3>
+                        <div class="word-count" id="wordCount">0 words</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Paper Metadata -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 id="paperTitle" class="text-primary">Loading...</h5>
+                            <p class="text-muted mb-1">
+                                <i class="fas fa-tag me-2"></i>
+                                Type: <span id="paperType">-</span>
+                            </p>
+                            <p class="text-muted mb-1">
+                                <i class="fas fa-quote-right me-2"></i>
+                                Citations: <span id="citationStyle">-</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <p class="text-muted mb-1">
+                                <i class="fas fa-calendar me-2"></i>
+                                Generated: <span id="generateDate">-</span>
+                            </p>
+                            <p class="text-muted mb-1">
+                                <i class="fas fa-clock me-2"></i>
+                                Processing time: <span id="processingTime">-</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="mb-4 text-center">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-outline-primary" onclick="showTab('content')">
+                                <i class="fas fa-file-alt me-2"></i>Paper Content
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="showTab('citations')">
+                                <i class="fas fa-quote-right me-2"></i>Citations
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="showTab('latex')">
+                                <i class="fas fa-code me-2"></i>LaTeX
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="showTab('outline')">
+                                <i class="fas fa-list me-2"></i>Outline
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Content Tabs -->
+                    <div id="contentTab" class="tab-content">
+                        <div class="content-preview" id="paperContent">
+                            Loading paper content...
+                        </div>
+                    </div>
+                    
+                    <div id="citationsTab" class="tab-content" style="display: none;">
+                        <div id="citationsList">
+                            Loading citations...
+                        </div>
+                    </div>
+                    
+                    <div id="latexTab" class="tab-content" style="display: none;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5>LaTeX Code</h5>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-2" onclick="generateLatex()">
+                                    <i class="fas fa-sync-alt me-1"></i>Generate LaTeX
+                                </button>
+                                <button class="btn btn-sm btn-success" onclick="downloadLatex()">
+                                    <i class="fas fa-download me-1"></i>Download .tex
+                                </button>
+                            </div>
+                        </div>
+                        <div class="latex-preview" id="latexContent">
+                            Click "Generate LaTeX" to create LaTeX code...
+                        </div>
+                    </div>
+                    
+                    <div id="outlineTab" class="tab-content" style="display: none;">
+                        <div class="content-preview" id="outlineContent">
+                            Loading outline...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Download Options -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-download me-2"></i>
+                        Download Options
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" onclick="downloadPDF()">
+                            <i class="fas fa-file-pdf me-2"></i>Download PDF
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="downloadWord()">
+                            <i class="fas fa-file-word me-2"></i>Download DOCX
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="downloadLatex()">
+                            <i class="fas fa-file-code me-2"></i>Download LaTeX
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="copyToClipboard()">
+                            <i class="fas fa-copy me-2"></i>Copy Text
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Paper Statistics -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Paper Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <h4 class="text-primary" id="statWords">-</h4>
+                            <small class="text-muted">Words</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <h4 class="text-success" id="statCitations">-</h4>
+                            <small class="text-muted">Citations</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-info" id="statParagraphs">-</h4>
+                            <small class="text-muted">Paragraphs</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-warning" id="statSections">-</h4>
+                            <small class="text-muted">Sections</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tools me-2"></i>
+                        Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-warning" onclick="regeneratePaper()">
+                            <i class="fas fa-redo me-2"></i>Regenerate
+                        </button>
+                        <button class="btn btn-outline-info" onclick="editPaper()">
+                            <i class="fas fa-edit me-2"></i>Edit Paper
+                        </button>
+                        <a href="/generate" class="btn btn-outline-primary">
+                            <i class="fas fa-plus me-2"></i>New Paper
+                        </a>
+                        <button class="btn btn-outline-success" onclick="sharePaper()">
+                            <i class="fas fa-share-alt me-2"></i>Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Paper Content</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="editContent" class="form-control" rows="15" style="font-family: monospace;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveEdits()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let paperData = null;
+    let currentLatexContent = null;
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            // Get paper data from session storage
+            const storedData = sessionStorage.getItem('paperResult');
+            if (storedData) {
+                paperData = JSON.parse(storedData);
+                displayPaperData();
+            } else {
+                showAlert('No paper data found. Please generate a new paper.', 'warning');
+                setTimeout(() => window.location.href = '/generate', 2000);
+            }
+        } catch (error) {
+            console.error('Error loading paper data:', error);
+            showAlert('Error loading paper data.', 'danger');
+        }
+    });
+    
+    function displayPaperData() {
+        if (!paperData || !paperData.success) {
+            showAlert('Error in paper generation. Please try again.', 'danger');
+            return;
+        }
+        
+        const paper = paperData.paper;
+        const stats = calculateStats(paper.content);
+        
+        // Update metadata
+        document.getElementById('paperTitle').textContent = paper.title || 'Untitled Paper';
+        document.getElementById('paperType').textContent = paper.type || 'Research Paper';
+        document.getElementById('citationStyle').textContent = (paper.citation_style || 'APA').toUpperCase();
+        document.getElementById('generateDate').textContent = new Date().toLocaleDateString();
+        document.getElementById('processingTime').textContent = '~30 seconds';
+        
+        // Update word count
+        document.getElementById('wordCount').textContent = `${paperData.word_count || stats.words} words`;
+        
+        // Update statistics
+        document.getElementById('statWords').textContent = stats.words;
+        document.getElementById('statCitations').textContent = paperData.citations?.length || 0;
+        document.getElementById('statParagraphs').textContent = stats.paragraphs;
+        document.getElementById('statSections').textContent = stats.sections;
+        
+        // Display content
+        displayContent();
+        displayCitations();
+        displayOutline();
+    }
+    
+    function calculateStats(content) {
+        const words = content.split(/\s+/).filter(word => word.length > 0).length;
+        const paragraphs = content.split('\n\n').filter(p => p.trim().length > 0).length;
+        const sections = (content.match(/^#+\s/gm) || []).length;
+        
+        return { words, paragraphs, sections };
+    }
+    
+    function displayContent() {
+        const contentDiv = document.getElementById('paperContent');
+        const content = paperData.paper.content;
+        
+        // Convert markdown-style formatting to HTML
+        let htmlContent = content
+            .replace(/^# (.*$)/gm, '<h1 class="text-primary mt-4 mb-3">$1</h1>')
+            .replace(/^## (.*$)/gm, '<h2 class="text-secondary mt-3 mb-2">$1</h2>')
+            .replace(/^### (.*$)/gm, '<h3 class="text-info mt-3 mb-2">$1</h3>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/\[([^\]]+), (\d{4})\]/g, '<span class="badge bg-primary">$1, $2</span>')
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/\n/g, '<br>');
+        
+        contentDiv.innerHTML = `<p>${htmlContent}</p>`;
+    }
+    
+    function displayCitations() {
+        const citationsDiv = document.getElementById('citationsList');
+        const citations = paperData.citations || [];
+        
+        if (citations.length === 0) {
+            citationsDiv.innerHTML = '<p class="text-muted">No citations found.</p>';
+            return;
+        }
+        
+        let citationsHtml = '';
+        citations.forEach((citation, index) => {
+            citationsHtml += `
+                <div class="citation-item">
+                    <h6 class="text-primary">${citation.title || 'Untitled'}</h6>
+                    <p class="mb-1">
+                        <strong>Authors:</strong> ${citation.authors ? citation.authors.join(', ') : 'Unknown'}
+                    </p>
+                    <p class="mb-1">
+                        <strong>Year:</strong> ${citation.year || 'N/A'}
+                        ${citation.journal ? `| <strong>Journal:</strong> ${citation.journal}` : ''}
+                    </p>
+                    ${citation.doi ? `<p class="mb-1"><strong>DOI:</strong> ${citation.doi}</p>` : ''}
+                    ${citation.url ? `<p class="mb-0"><a href="${citation.url}" target="_blank" class="btn btn-sm btn-outline-primary">View Source</a></p>` : ''}
+                </div>
+            `;
+        });
+        
+        citationsDiv.innerHTML = citationsHtml;
+    }
+    
+    function displayOutline() {
+        const outlineDiv = document.getElementById('outlineContent');
+        const outline = paperData.outline || 'No outline available.';
+        
+        // Convert outline to HTML
+        let htmlOutline = outline
+            .replace(/^I\.\s+(.*$)/gm, '<h4 class="text-primary mt-3 mb-2">I. $1</h4>')
+            .replace(/^II\.\s+(.*$)/gm, '<h4 class="text-primary mt-3 mb-2">II. $1</h4>')
+            .replace(/^III\.\s+(.*$)/gm, '<h4 class="text-primary mt-3 mb-2">III. $1</h4>')
+            .replace(/^IV\.\s+(.*$)/gm, '<h4 class="text-primary mt-3 mb-2">IV. $1</h4>')
+            .replace(/^V\.\s+(.*$)/gm, '<h4 class="text-primary mt-3 mb-2">V. $1</h4>')
+            .replace(/^\s+A\.\s+(.*$)/gm, '<h5 class="text-secondary mt-2 mb-1 ms-3">A. $1</h5>')
+            .replace(/^\s+B\.\s+(.*$)/gm, '<h5 class="text-secondary mt-2 mb-1 ms-3">B. $1</h5>')
+            .replace(/^\s+C\.\s+(.*$)/gm, '<h5 class="text-secondary mt-2 mb-1 ms-3">C. $1</h5>')
+            .replace(/^\s+1\.\s+(.*$)/gm, '<h6 class="text-info mt-1 mb-1 ms-4">1. $1</h6>')
+            .replace(/^\s+2\.\s+(.*$)/gm, '<h6 class="text-info mt-1 mb-1 ms-4">2. $1</h6>')
+            .replace(/^\s+3\.\s+(.*$)/gm, '<h6 class="text-info mt-1 mb-1 ms-4">3. $1</h6>')
+            .replace(/\n/g, '<br>');
+        
+        outlineDiv.innerHTML = htmlOutline;
+    }
+    
+    // Tab functionality
+    function showTab(tabName) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.style.display = 'none';
+        });
+        
+        // Remove active class from buttons
+        document.querySelectorAll('.btn-group .btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab
+        document.getElementById(tabName + 'Tab').style.display = 'block';
+        
+        // Add active class to button
+        event.target.classList.add('active');
+    }
+    
+    // LaTeX functionality
+    async function generateLatex() {
+        if (!paperData) return;
+        
+        try {
+            showLoading();
+            
+            const latexData = {
+                paper_content: paperData.paper.content,
+                title: paperData.paper.title,
+                author: 'Research Assistant'
+            };
+            
+            const result = await apiCall('/api/generate-latex', latexData, 'POST');
+            currentLatexContent = result.latex_content;
+            
+            document.getElementById('latexContent').textContent = currentLatexContent;
+            showAlert('LaTeX code generated successfully!', 'success');
+            
+        } catch (error) {
+            showAlert(`Error generating LaTeX: ${error.message}`, 'danger');
+        } finally {
+            hideLoading();
+        }
+    }
+    
+    async function downloadLatex() {
+        if (!currentLatexContent) {
+            await generateLatex();
+        }
+        
+        if (!currentLatexContent) return;
+        
+        try {
+            const blob = new Blob([currentLatexContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${paperData.paper.title.replace(/[^a-zA-Z0-9]/g, '_')}.tex`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            showAlert('LaTeX file downloaded!', 'success');
+        } catch (error) {
+            showAlert(`Error downloading LaTeX: ${error.message}`, 'danger');
+        }
+    }
+    
+    // Download functionality
+    function downloadPDF() {
+        showAlert('PDF download feature coming soon! Use LaTeX for now.', 'info');
+    }
+    
+    function downloadWord() {
+        showAlert('Word download feature coming soon! Copy the text for now.', 'info');
+    }
+    
+    function copyToClipboard() {
+        if (!paperData) return;
+        
+        const content = paperData.paper.content;
+        navigator.clipboard.writeText(content).then(() => {
+            showAlert('Paper content copied to clipboard!', 'success');
+        }).catch(() => {
+            showAlert('Failed to copy content', 'danger');
+        });
+    }
+    
+    // Edit functionality
+    function editPaper() {
+        if (!paperData) return;
+        
+        document.getElementById('editContent').value = paperData.paper.content;
+        new bootstrap.Modal(document.getElementById('editModal')).show();
+    }
+    
+    function saveEdits() {
+        const newContent = document.getElementById('editContent').value;
+        paperData.paper.content = newContent;
+        
+        // Update display
+        displayContent();
+        const stats = calculateStats(newContent);
+        document.getElementById('statWords').textContent = stats.words;
+        document.getElementById('wordCount').textContent = `${stats.words} words`;
+        
+        // Update session storage
+        sessionStorage.setItem('paperResult', JSON.stringify(paperData));
+        
+        bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+        showAlert('Paper content updated successfully!', 'success');
+    }
+    
+    // Other actions
+    function regeneratePaper() {
+        if (confirm('Are you sure you want to regenerate the paper? This will replace the current content.')) {
+            window.location.href = '/generate';
+        }
+    }
+    
+    function sharePaper() {
+        const shareData = {
+            title: paperData.paper.title,
+            text: 'Check out this AI-generated research paper!',
+            url: window.location.href
+        };
+        
+        if (navigator.share) {
+            navigator.share(shareData);
+        } else {
+            // Fallback - copy URL to clipboard
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                showAlert('Share URL copied to clipboard!', 'success');
+            });
+        }
+    }
+    
+    // Initialize with content tab active
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            if (document.querySelector('.btn-group .btn')) {
+                document.querySelector('.btn-group .btn').classList.add('active');
+            }
+        }, 100);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+
+{% block title %}Trend Predictor{% endblock %}
+
+{% block content %}
+<div class="trends-container">
+    <h1>📈 Research Trend Predictor</h1>
+    
+    <div class="predictor-grid">
+        <!-- Trend Prediction -->
+        <div class="predictor-card">
+            <h2>🔮 Predict Future Trends</h2>
+            <div class="form-group">
+                <input type="text" id="trend-field" placeholder="Research field (e.g., AI, Biology)">
+                <select id="trend-timeframe">
+                    <option value="2024-2025">2024-2025</option>
+                    <option value="2024-2027">2024-2027</option>
+                    <option value="2024-2030">2024-2030</option>
+                </select>
+                <button id="predict-trends" class="trend-btn">Predict Trends</button>
+            </div>
+            <div id="trends-result" class="result-box"></div>
+        </div>
+
+        <!-- Future Paper Concepts -->
+        <div class="predictor-card">
+            <h2>💡 Future Paper Concepts</h2>
+            <div class="form-group">
+                <input type="text" id="concept-topic" placeholder="Current research topic">
+                <button id="generate-concepts" class="trend-btn">Generate Concepts</button>
+            </div>
+            <div id="concepts-result" class="result-box"></div>
+        </div>
+
+        <!-- Research Evolution -->
+        <div class="predictor-card">
+            <h2>🧬 Research Evolution</h2>
+            <div class="form-group">
+                <input type="text" id="evolution-topic" placeholder="Topic to analyze evolution">
+                <button id="analyze-evolution" class="trend-btn">Analyze Evolution</button>
+            </div>
+            <div id="evolution-result" class="result-box"></div>
+        </div>
+
+        <!-- Citation Potential -->
+        <div class="predictor-card">
+            <h2>📊 Citation Potential</h2>
+            <div class="form-group">
+                <textarea id="citation-abstract" placeholder="Paste paper abstract..." rows="4"></textarea>
+                <button id="predict-citations" class="trend-btn">Predict Citations</button>
+            </div>
+            <div id="citation-result" class="result-box"></div>
+        </div>
+
+        <!-- Research Fusion -->
+        <div class="predictor-card">
+            <h2>🔬 Research Fusion</h2>
+            <div class="form-group">
+                <input type="text" id="fusion-field1" placeholder="First research field">
+                <input type="text" id="fusion-field2" placeholder="Second research field">
+                <button id="generate-fusion" class="trend-btn">Generate Fusion Ideas</button>
+            </div>
+            <div id="fusion-result" class="result-box"></div>
+        </div>
+
+        <!-- Paper Evolution -->
+        <div class="predictor-card">
+            <h2>📄 Paper Evolution</h2>
+            <div class="form-group">
+                <textarea id="base-paper" placeholder="Base paper content..." rows="3"></textarea>
+                <select id="target-audience" multiple>
+                    <option value="academic">Academic</option>
+                    <option value="industry">Industry</option>
+                    <option value="general">General Public</option>
+                    <option value="policy">Policy Makers</option>
+                </select>
+                <button id="evolve-paper" class="trend-btn">Evolve Paper</button>
+            </div>
+            <div id="evolution-paper-result" class="result-box"></div>
+        </div>
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">
+        <div class="pulse-loader"></div>
+        <p>Analyzing future patterns...</p>
+    </div>
+</div>
+
+<style>
+.trends-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.trends-container h1 {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.predictor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.predictor-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.predictor-card h2 {
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-group input, .form-group textarea, .form-group select {
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.form-group select[multiple] {
+    height: 100px;
+}
+
+.trend-btn {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+
+.trend-btn:hover {
+    transform: translateY(-2px);
+}
+
+.result-box {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.pulse-loader {
+    width: 40px;
+    height: 40px;
+    background: #667eea;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.8); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.5; }
+    100% { transform: scale(0.8); opacity: 1; }
+}
+
+.audience-versions {
+    display: grid;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.version-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    border-left: 4px solid #667eea;
+}
+
+.version-card h4 {
+    color: #333;
+    margin-bottom: 10px;
+}
+</style>
+
+<script>
+class TrendPredictor {
+    constructor() {
+        this.initializeEventListeners();
+    }
+
+    initializeEventListeners() {
+        document.getElementById('predict-trends').addEventListener('click', () => this.predictTrends());
+        document.getElementById('generate-concepts').addEventListener('click', () => this.generateConcepts());
+        document.getElementById('analyze-evolution').addEventListener('click', () => this.analyzeEvolution());
+        document.getElementById('predict-citations').addEventListener('click', () => this.predictCitations());
+        document.getElementById('generate-fusion').addEventListener('click', () => this.generateFusion());
+        document.getElementById('evolve-paper').addEventListener('click', () => this.evolvePaper());
+    }
+
+    async predictTrends() {
+        const field = document.getElementById('trend-field').value;
+        const timeframe = document.getElementById('trend-timeframe').value;
+        
+        if (!field) return alert('Enter a research field!');
+
+        this.showLoading();
+        try {
+            const response = await fetch('/api/oracle/predict-trends', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({field, timeframe})
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                this.displayResult('trends-result', `TRENDS:\n${result.trends}\n\nFUTURE CONCEPTS:\n${result.future_concepts}`);
+            } else {
+                alert('Error: ' + result.error);
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+    async generateConcepts() {
+        const topic = document.getElementById('concept-topic').value;
+        if (!topic) return alert('Enter a research topic!');
+
+        this.showLoading();
+        try {
+            // Direct API call to trend predictor
+            const response = await fetch('/api/oracle/predict-trends', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({field: topic, timeframe: '2024-2027'})
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                this.displayResult('concepts-result', result.future_concepts);
+            } else {
+                alert('Error: ' + result.error);
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+    async analyzeEvolution() {
+        const topic = document.getElementById('evolution-topic').value;
+        if (!topic) return alert('Enter a topic!');
+
+        this.showLoading();
+        try {
+            const response = await fetch('/api/oracle/evolution-map', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({topic})
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                this.displayResult('evolution-result', `TIMELINE:\n${result.timeline}\n\nECOSYSTEM:\n${result.ecosystem}`);
+            } else {
+                alert('Error: ' + result.error);
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+    async predictCitations() {
+        const abstract = document.getElementById('citation-abstract').value;
+        if (!abstract) return alert('Enter paper abstract!');
+
+        this.showLoading();
+        try {
+            // Mock citation prediction - would need actual API endpoint
+            setTimeout(() => {
+                const mockResult = `Citation Potential Analysis:
+                
+Novelty Factor: 8/10
+Practical Applicability: 7/10
+Interdisciplinary Appeal: 6/10
+Expected Citation Range: Medium-High (15-50 citations/year)
+Peak Citation Timeline: 2-3 years post-publication
+Longevity Prediction: 5-7 years active citation period`;
+                
+                this.displayResult('citation-result', mockResult);
+                this.hideLoading();
+            }, 2000);
+        } catch (error) {
+            alert('Error: ' + error.message);
+            this.hideLoading();
+        }
+    }
+
+    async generateFusion() {
+        const field1 = document.getElementById('fusion-field1').value;
+        const field2 = document.getElementById('fusion-field2').value;
+        
+        if (!field1 || !field2) return alert('Enter both research fields!');
+
+        this.showLoading();
+        try {
+            const response = await fetch('/api/oracle/synchronicity', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({topic1: field1, topic2: field2})
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                this.displayResult('fusion-result', result.fusion_ideas);
+            } else {
+                alert('Error: ' + result.error);
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+    async evolvePaper() {
+        const basePaper = document.getElementById('base-paper').value;
+        const audienceSelect = document.getElementById('target-audience');
+        const audiences = Array.from(audienceSelect.selectedOptions).map(option => option.value);
+        
+        if (!basePaper || audiences.length === 0) {
+            return alert('Enter base paper and select target audiences!');
+        }
+
+        this.showLoading();
+        try {
+            // Mock paper evolution - would need actual API endpoint
+            setTimeout(() => {
+                let result = 'Paper Evolution Results:\n\n';
+                audiences.forEach(audience => {
+                    result += `${audience.toUpperCase()} VERSION:\n`;
+                    result += `Adapted for ${audience} audience with appropriate language complexity and focus.\n\n`;
+                });
+                
+                this.displayResult('evolution-paper-result', result);
+                this.hideLoading();
+            }, 3000);
+        } catch (error) {
+            alert('Error: ' + error.message);
+            this.hideLoading();
+        }
+    }
+
+    displayResult(elementId, content) {
+        const element = document.getElementById(elementId);
+        element.textContent = content;
+        element.style.display = 'block';
+    }
+
+    showLoading() {
+        document.getElementById('loading').style.display = 'block';
+    }
+
+    hideLoading() {
+        document.getElementById('loading').style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => new TrendPredictor());
+</script>
+{% endblock %}

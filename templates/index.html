@@ -1,0 +1,196 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInUp">
+                    AI-Powered Research Paper Generator
+                </h1>
+                <p class="lead mb-5 animate__animated animate__fadeInUp animate__delay-1s">
+                    Generate comprehensive, well-structured research papers with proper citations and LaTeX formatting in minutes, not hours.
+                </p>
+                <a href="/generate" class="btn btn-primary btn-lg me-3 animate__animated animate__fadeInUp animate__delay-2s">
+                    <i class="fas fa-rocket me-2"></i>Start Generating
+                </a>
+                <button class="btn btn-outline-light btn-lg animate__animated animate__fadeInUp animate__delay-2s" onclick="scrollToFeatures()">
+                    <i class="fas fa-info-circle me-2"></i>Learn More
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">Powerful Features for Academic Excellence</h2>
+                <p class="lead text-muted">Everything you need to create professional research papers with AI assistance</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 animate__animated animate__fadeInUp">
+                    <div class="card-body">
+                        <i class="fas fa-brain feature-icon"></i>
+                        <h4 class="card-title">AI-Generated Content</h4>
+                        <p class="card-text text-muted">Advanced AI creates comprehensive, well-researched content tailored to your topic and academic level.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="card-body">
+                        <i class="fas fa-quote-right feature-icon"></i>
+                        <h4 class="card-title">Real Citations</h4>
+                        <p class="card-text text-muted">Automatically search and include real academic citations in APA, MLA, Chicago, and IEEE formats.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="card-body">
+                        <i class="fas fa-file-code feature-icon"></i>
+                        <h4 class="card-title">LaTeX Export</h4>
+                        <p class="card-text text-muted">Generate professional LaTeX documents ready for academic submission and publication.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 animate__animated animate__fadeInUp animate__delay-3s">
+                    <div class="card-body">
+                        <i class="fas fa-layer-group feature-icon"></i>
+                        <h4 class="card-title">Multiple Paper Types</h4>
+                        <p class="card-text text-muted">Support for research papers, literature reviews, essays, thesis chapters, and technical reports.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 animate__animated animate__fadeInUp animate__delay-4s">
+                    <div class="card-body">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h4 class="card-title">Smart Analysis</h4>
+                        <p class="card-text text-muted">Intelligent content analysis with word count tracking and structure optimization.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 animate__animated animate__fadeInUp animate__delay-5s">
+                    <div class="card-body">
+                        <i class="fas fa-bolt feature-icon"></i>
+                        <h4 class="card-title">Lightning Fast</h4>
+                        <p class="card-text text-muted">Generate complete research papers in minutes with our optimized AI pipeline.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-5 bg-gradient">
+    <div class="container">
+        <div class="row text-center text-white">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h3 class="display-4 fw-bold" data-counter="1000">0</h3>
+                <p class="lead">Papers Generated</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h3 class="display-4 fw-bold" data-counter="50000">0</h3>
+                <p class="lead">Citations Found</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h3 class="display-4 fw-bold" data-counter="24">0</h3>
+                <p class="lead">Hour Hackathon</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h3 class="display-4 fw-bold" data-counter="99">0</h3>
+                <p class="lead">% Satisfaction</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <div class="card bg-gradient p-5 text-white">
+                    <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Research?</h2>
+                    <p class="lead mb-4">Join thousands of researchers, students, and academics who trust our AI-powered platform.</p>
+                    <a href="/generate" class="btn btn-light btn-lg">
+                        <i class="fas fa-play me-2"></i>Get Started Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Smooth scrolling
+    function scrollToFeatures() {
+        document.getElementById('features').scrollIntoView({ 
+            behavior: 'smooth' 
+        });
+    }
+    
+    // Counter animation
+    const animateCounters = () => {
+        const counters = document.querySelectorAll('[data-counter]');
+        
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-counter'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+            
+            const updateCounter = () => {
+                if (current < target) {
+                    current += increment;
+                    counter.textContent = Math.ceil(current);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.textContent = target;
+                }
+            };
+            
+            updateCounter();
+        });
+    };
+    
+    // Intersection Observer for animations
+    const observeElements = () => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.querySelector('[data-counter]')) {
+                        animateCounters();
+                    }
+                }
+            });
+        });
+        
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    };
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', observeElements);
+</script>
+{% endblock %}
