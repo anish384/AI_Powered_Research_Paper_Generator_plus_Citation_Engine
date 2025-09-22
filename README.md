@@ -1,1 +1,1 @@
-# AI_Powered_Research_Paper_Generator_plus_Citation_Engine
+# AI powered Research Paper Generator + Citation Engine
